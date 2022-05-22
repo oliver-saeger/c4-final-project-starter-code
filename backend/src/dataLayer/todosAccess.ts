@@ -15,7 +15,7 @@ const XAWS = AWSXRay.captureAWS(AWS)
 const logger = createLogger('TodosAccess')
 
 const dbClient: DocumentClient = new XAWS.DynamoDB.DocumentClient();
-const todoTable = process.env.TODO_TABLE
+const todoTable = process.env.TODOS_TABLE
 
 export class TodosAccess {
 
