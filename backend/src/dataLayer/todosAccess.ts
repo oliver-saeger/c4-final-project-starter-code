@@ -20,7 +20,7 @@ const todoTable = process.env.TODOS_TABLE
 export class TodosAccess {
 
   async getTodosPerUser(userId: string): Promise<TodoItem[]> {
-    logger.log("Getting all todos for user: ", userId)
+    logger.info("Getting all todos for user: ", userId)
 
     const params: QueryInput = {
       TableName: todoTable,
