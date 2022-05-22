@@ -1,4 +1,4 @@
-org: myorg
+org: saegeroliver
 app: serverless-todo-app
 service: serverless-todo-app
 
@@ -31,14 +31,12 @@ provider:
     # Enable API Gateway logs
     restApi: true
 
-  iam:
-    role:
-      statements:
-        - Effect: Allow
-          Action:
-            - xray:PutTelemetryRecords
-            - xray:PutTraceSegments
-          Resource: "*"
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - xray:PutTelemetryRecords
+        - xray:PutTraceSegments
+      Resource: "*"
 #        - Effect: Allow TODO: what is this needed for?
 #        Action:
 #          - secretsmanager:GetSecretValue
@@ -48,21 +46,21 @@ provider:
 #            - kms:Decrypt
 #          Resource: !GetAtt KMSKey.Arn
 
-  custom:
-    topicName: todosTopic-${self:provider.stage}
-    documentation:
-      api:
-        info:
-          version: v1.0.0
-          title: Todos API
-          description: Serverless application for todos
-      models:
-        - name: GroupRequest
-          contentType: application/json
-          schema: ${file(models/create-group-request.json)}
-        - name: ImageRequest
-          contentType: application/json
-          schema: ${file(models/create-image-request.json)}
+custom:
+  topicName: todosTopic-${self:provider.stage}
+  documentation:
+    api:
+      info:
+        version: v1.0.0
+        title: Todos API
+        description: Serverless application for todos
+    models:
+      - name: TodoItem
+        contentType: application/json
+        schema: ${file(models/create-todo-model.json)}
+      - name: UpdateTodoItem
+        contentType: application/json
+        schema: ${file(models/update-todo-model.json)}
 
 
 functions:
@@ -93,7 +91,7 @@ functions:
           cors: true
           authorizer: Auth
           request:
-            schemas:
+            schema:
               application/json: ${file(models/create-todo-model.json)}
     iamRoleStatements:
       - Effect: Allow
@@ -110,7 +108,7 @@ functions:
           cors: true
           authorizer: Auth
           request:
-            schemas:
+            schema:
               application/json: ${file(models/create-todo-model.json)}
     iamRoleStatements:
       - Effect: Allow
@@ -226,4 +224,4 @@ resources:
               Principal: '*'
               Action: 's3:GetObject'
               Resource: 'arn:aws:s3:::${self:provider.environment.ATTACHMENT_S3_BUCKET}/*'
-        Bucket: !Ref: AttachementsBucket
+        Bucket: !Ref AttachementsBucket

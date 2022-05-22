@@ -1,8 +1,8 @@
 import * as AWS from 'aws-sdk'
-import * as AWSXRay from 'aws-xray-sdk'
+// import * as AWSXRay from 'aws-xray-sdk'
 import { createLogger } from '../utils/logger'
 import { TodoItem } from '../models/TodoItem'
-import {APIGatewayProxyEvent, APIGatewayProxyHandler, APIGatewayProxyResult} from "aws-lambda";
+// import {APIGatewayProxyEvent, APIGatewayProxyHandler, APIGatewayProxyResult} from "aws-lambda";
 import {TodoUpdate} from "../models/TodoUpdate";
 import {DocumentClient} from "aws-sdk/lib/dynamodb/document_client";
 import UpdateItemInput = DocumentClient.UpdateItemInput;
@@ -10,6 +10,7 @@ import QueryInput = DocumentClient.QueryInput;
 import PutItemInput = DocumentClient.PutItemInput;
 import DeleteItemInput = DocumentClient.DeleteItemInput;
 
+const AWSXRay = require('aws-xray-sdk')
 const XAWS = AWSXRay.captureAWS(AWS)
 
 const logger = createLogger('TodosAccess')
