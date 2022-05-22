@@ -178,10 +178,10 @@ resources:
           - AttributeName: attachmentUrl
             AttributeType: S
         KeySchema:
-          - AttributeName: todoId
-            KeyType: RANGE
           - AttributeName: userId
             KeyType: HASH
+          - AttributeName: todoId
+            KeyType: RANGE
         BillingMode: PAY_PER_REQUEST
         TableName: ${self:provider.environment.TODOS_TABLE}
         LocalSecondaryIndexes:
