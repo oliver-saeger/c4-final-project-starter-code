@@ -20,7 +20,7 @@ const todoTable = process.env.TODOS_TABLE
 export class TodosAccess {
 
   async getTodosPerUser(userId: string): Promise<TodoItem[]> {
-    logger.info("Getting all todos for user: ", userId)
+    logger.info("Getting all todos for user: " + userId)
 
     const params: QueryInput = {
       TableName: todoTable,
@@ -32,7 +32,9 @@ export class TodosAccess {
     }
 
     const result = await dbClient.query(params).promise()
-    return result.Items as TodoItem[]
+    const todoItems = result.Items as TodoItem[]
+    logger.info("Returning Todos: " + todoItems)
+    return todoItems
   }
 
   async createTodoItem(todoItem: TodoItem): Promise<TodoItem> {
