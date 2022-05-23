@@ -17,18 +17,18 @@ export async function getTodosPerUser(userId: string): Promise<TodoItem[]> {
 
 export async function createTodo(userId: string, createTodoRequest: CreateTodoRequest): Promise<TodoItem> {
   const todoId = uuid.v4();
-  const uploadUrl = attachmentsUtils.getAttachmentBucketUrl(todoId) // TODO: Was wenn keine Datei hochgeladen wird?
+  const uploadUrl = attachmentsUtils.getAttachmentBucketUrl(todoId)
 
   const newTodoItem: TodoItem = {
     todoId: todoId,
     userId: userId,
-    createdAt: Date.prototype.toISOString(),
+    createdAt: new Date().toISOString(),
     done: false,
     ...createTodoRequest,
     attachmentUrl: uploadUrl
   }
 
-  logger.info('Storing new Todo: ', newTodoItem)
+  logger.info('Storing new Todo: ' + newTodoItem)
   return todosAccess.createTodoItem(newTodoItem);
 }
 
