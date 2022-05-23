@@ -17,15 +17,13 @@ export async function getTodosPerUser(userId: string): Promise<TodoItem[]> {
 
 export async function createTodo(userId: string, createTodoRequest: CreateTodoRequest): Promise<TodoItem> {
   const todoId = uuid.v4();
-  const uploadUrl = attachmentsUtils.getAttachmentBucketUrl(todoId)
 
   const newTodoItem: TodoItem = {
     todoId: todoId,
     userId: userId,
     createdAt: new Date().toISOString(),
     done: false,
-    ...createTodoRequest,
-    attachmentUrl: uploadUrl
+    ...createTodoRequest
   }
 
   logger.info('Storing new Todo: ' + newTodoItem)
