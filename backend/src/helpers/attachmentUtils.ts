@@ -16,10 +16,10 @@ export class AttachmentUtils {
   createAttachmentPresignedUrl(userId: string, todoId: string): string {
     return s3.getSignedUrl('putObject', {
       Bucket: bucketName,
-      Key: {
+      Key: JSON.stringify({
         userId,
         todoId
-      },
+      }),
       Expires: parseInt(urlExpiration)
     })
   }
