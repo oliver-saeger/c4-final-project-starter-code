@@ -8,8 +8,6 @@ import UpdateItemInput = DocumentClient.UpdateItemInput;
 import QueryInput = DocumentClient.QueryInput;
 import PutItemInput = DocumentClient.PutItemInput;
 import DeleteItemInput = DocumentClient.DeleteItemInput;
-import {PromiseResult} from "aws-sdk/lib/request";
-import {AWSError} from "aws-sdk";
 
 const AWSXRay = require('aws-xray-sdk')
 const XAWS = AWSXRay.captureAWS(AWS)
