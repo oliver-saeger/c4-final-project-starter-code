@@ -76,13 +76,6 @@ export class TodosAccess {
       }
     }
 
-    dbClient.delete(params, (err, data) => {
-      if(err) {
-        logger.error("Deletion failed: " + err.name + " - " + err.message)
-      } else {
-        logger.info("Deletion successful!")
-      }
-    })
     dbClient.delete(params).on("error", err => logger.error(err.message))
   }
 }
