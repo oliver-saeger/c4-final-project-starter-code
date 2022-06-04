@@ -36,7 +36,7 @@ export async function updateTodo(userId: string, todoId: string, updateTodoReque
 }
 
 export async function deleteTodo(userId: string, todoId: string): Promise<void> {
-  logger.info('Storing new Todo: ', {userId: userId, todoId: todoId})
+  logger.info('Delete Todo Item: ', {userId: userId, todoId: todoId})
   return todosAccess.deleteTodoItem(userId, todoId)
 }
 
