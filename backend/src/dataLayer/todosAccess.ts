@@ -43,8 +43,8 @@ export class TodosAccess {
       Item: todoItem
     }
 
-    const createdItem = await dbClient.put(params).promise()
-    return createdItem.Attributes as TodoItem
+    await dbClient.put(params).promise()
+    return todoItem
   }
 
   async updateTodoItem(userId: string, todoId: string, todoUpdate: TodoUpdate): Promise<TodoItem> {

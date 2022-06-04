@@ -11,12 +11,12 @@ const logger = createLogger('todos')
 
 export const handler = middy(
   async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
-    logger.info("Create TODO event: " + event)
+    logger.info("Create TODO event: " + JSON.stringify(event))
     const createTodoRequest: CreateTodoRequest = JSON.parse(event.body)
     const userId = getUserId(event);
 
     const newTodoItem = await createTodo(userId, createTodoRequest)
-    logger.info("New TODO item: " + newTodoItem)
+    logger.info("New TODO item: " + JSON.stringify(newTodoItem))
 
     return {
       statusCode: 201,
