@@ -79,7 +79,7 @@ export async function deleteTodoItem(userId: string, todoId: string): Promise<vo
   await dbClient.delete(params).promise()
 }
 
-export async function updateAttachmentUrl(userId: string, todoId: string, attachmentUrl: string) {
+export async function updateAttachmentUrl(userId: string, todoId: string, attachmentUrl: string): Promise<void> {
   await dbClient.update({
     TableName: todoTable,
     Key: {
