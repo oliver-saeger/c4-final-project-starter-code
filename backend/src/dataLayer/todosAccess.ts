@@ -81,4 +81,18 @@ export class TodosAccess {
 
     await dbClient.delete(params).promise()
   }
+
+  async updateAttachmentUrl(userId: string, todoId: string, attachmentUrl: string) {
+    await dbClient.update({
+      TableName: todoTable,
+      Key: {
+        userId,
+        todoId
+      },
+      UpdateExpression: 'set attachmentUrl = :attachmentUrl',
+      ExpressionAttributeValues: {
+        ':attachmentUrl': attachmentUrl
+      }
+    }).promise()
+  }
 }

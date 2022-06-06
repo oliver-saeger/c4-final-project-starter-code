@@ -40,9 +40,15 @@ export async function deleteTodo(userId: string, todoId: string): Promise<void> 
   return todosAccess.deleteTodoItem(userId, todoId)
 }
 
-export async function createAttachmentPresignedUrl(userId: string, todoId: string): Promise<string> {
-  logger.info('Create new pre-signed upload url for: ', {userId: userId, todoId: todoId})
-  const url = attachmentsUtils.createAttachmentPresignedUrl(userId, todoId)
+export async function createAttachmentPresignedUrl(attachmentId: string): Promise<string> {
+  logger.info('Create new pre-signed upload url for todoId: ' + attachmentId)
+  const url = attachmentsUtils.createAttachmentPresignedUrl(attachmentId)
   logger.info("Upload URL: " + url)
   return url;
+}
+
+export async function addAttachmentToTodo(userId: string, todoId: string, attachmentId: string) {
+  const attachmentUrl = attachmentsUtils.getAttachmentBucketUrl(attachmentId);
+  logger.info('Get attachment URL: ' + attachmentUrl)
+  await todosAccess.updateAttachmentUrl(userId, todoId, attachmentUrl)
 }

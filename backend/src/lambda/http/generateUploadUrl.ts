@@ -3,40 +3,19 @@ import 'source-map-support/register'
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda'
 import * as middy from 'middy'
 import { cors, httpErrorHandler } from 'middy/middlewares'
+import * as uuid from 'uuid'
 
-import { createAttachmentPresignedUrl } from '../../businessLogic/todos'
-import { AttachmentUtils } from '../../helpers/attachmentUtils'
+import { createAttachmentPresignedUrl, addAttachmentToTodo } from '../../businessLogic/todos'
 import { getUserId } from '../utils'
-import * as AWS from "aws-sdk";
-import {DocumentClient} from "aws-sdk/lib/dynamodb/document_client";
-
-const AWSXRay = require('aws-xray-sdk')
-const XAWS = AWSXRay.captureAWS(AWS)
-
-
-const dbClient: DocumentClient = new XAWS.DynamoDB.DocumentClient();
-const todoTable = process.env.TODOS_TABLE
-
-const attachmentUtils = new AttachmentUtils()
 
 export const handler = middy(
   async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
     const todoId = event.pathParameters.todoId
     const userId = getUserId(event)
+    const attachmentId = uuid.v4();
 
-    const uploadUrl = await createAttachmentPresignedUrl(userId, todoId)
-
-    dbClient.update({
-      TableName: todoTable,
-      Key: {
-        userId,
-        todoId
-      },
-      UpdateExpression: 'set attachmentUrl = :attachmentUrl',
-      ExpressionAttributeValues: {
-        ':attachmentUrl': attachmentUtils.getAttachmentBucketUrl(todoId)
-      }
-    })
+    const uploadUrl = await createAttachmentPresignedUrl(attachmentId)
+    await addAttachmentToTodo(userId, todoId, attachmentId)
 
     return {
       statusCode: 200,
