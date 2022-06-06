@@ -1,5 +1,11 @@
-import { TodosAccess } from '../dataLayer/todosAccess'
-import { AttachmentUtils } from '../helpers/attachmentUtils';
+import {
+  createTodoItem,
+  deleteTodoItem,
+  getTodoItemsPerUser,
+  updateAttachmentUrl,
+  updateTodoItem
+} from '../dataLayer/todosAccess'
+import { getAttachmentBucketUrl, createAttachmentPresignedUrl } from '../helpers/attachmentUtils';
 import { TodoItem } from '../models/TodoItem'
 import { CreateTodoRequest } from '../requests/CreateTodoRequest'
 import { UpdateTodoRequest } from '../requests/UpdateTodoRequest'
@@ -7,12 +13,10 @@ import { createLogger } from '../utils/logger'
 import * as uuid from 'uuid'
 // import * as createError from 'http-errors'
 
-const todosAccess = new TodosAccess()
-const attachmentsUtils = new AttachmentUtils()
 const logger = createLogger('todos')
 
-export async function getTodosPerUser(userId: string): Promise<TodoItem[]> {
-  return todosAccess.getTodosPerUser(userId)
+export async function getAllTodosForUser(userId: string): Promise<TodoItem[]> {
+  return getTodoItemsPerUser(userId)
 }
 
 export async function createTodo(userId: string, createTodoRequest: CreateTodoRequest): Promise<TodoItem> {
@@ -27,28 +31,28 @@ export async function createTodo(userId: string, createTodoRequest: CreateTodoRe
   }
 
   logger.info('Storing new Todo: ' + newTodoItem)
-  return todosAccess.createTodoItem(newTodoItem);
+  return createTodoItem(newTodoItem);
 }
 
 export async function updateTodo(userId: string, todoId: string, updateTodoRequest: UpdateTodoRequest): Promise<TodoItem> {
   logger.info('Update Todo Item: ', {userId: userId, todoId: todoId, updateTodoRequest: updateTodoRequest})
-  return todosAccess.updateTodoItem(userId, todoId, updateTodoRequest);
+  return updateTodoItem(userId, todoId, updateTodoRequest);
 }
 
 export async function deleteTodo(userId: string, todoId: string): Promise<void> {
   logger.info('Delete Todo Item: ', {userId: userId, todoId: todoId})
-  return todosAccess.deleteTodoItem(userId, todoId)
+  return deleteTodoItem(userId, todoId)
 }
 
-export async function createAttachmentPresignedUrl(attachmentId: string): Promise<string> {
+export async function createUploadUrl(attachmentId: string): Promise<string> {
   logger.info('Create new pre-signed upload url for todoId: ' + attachmentId)
-  const url = attachmentsUtils.createAttachmentPresignedUrl(attachmentId)
+  const url = createAttachmentPresignedUrl(attachmentId)
   logger.info("Upload URL: " + url)
   return url;
 }
 
 export async function addAttachmentToTodo(userId: string, todoId: string, attachmentId: string) {
-  const attachmentUrl = attachmentsUtils.getAttachmentBucketUrl(attachmentId);
+  const attachmentUrl = getAttachmentBucketUrl(attachmentId);
   logger.info('Get attachment URL: ' + attachmentUrl)
-  await todosAccess.updateAttachmentUrl(userId, todoId, attachmentUrl)
+  await updateAttachmentUrl(userId, todoId, attachmentUrl)
 }

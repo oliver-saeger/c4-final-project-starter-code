@@ -5,7 +5,7 @@ import * as middy from 'middy'
 import { cors, httpErrorHandler } from 'middy/middlewares'
 import * as uuid from 'uuid'
 
-import { createAttachmentPresignedUrl, addAttachmentToTodo } from '../../businessLogic/todos'
+import { createUploadUrl, addAttachmentToTodo } from '../../businessLogic/todos'
 import { getUserId } from '../utils'
 
 export const handler = middy(
@@ -14,7 +14,7 @@ export const handler = middy(
     const userId = getUserId(event)
     const attachmentId = uuid.v4();
 
-    const uploadUrl = await createAttachmentPresignedUrl(attachmentId)
+    const uploadUrl = await createUploadUrl(attachmentId)
     await addAttachmentToTodo(userId, todoId, attachmentId)
 
     return {

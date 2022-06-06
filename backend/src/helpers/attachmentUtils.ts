@@ -11,18 +11,15 @@ const s3 = new XAWS.S3({
   signatureVersion: 'v4'
 })
 
-export class AttachmentUtils {
 
-  createAttachmentPresignedUrl(attachmentId: string): string {
-    return s3.getSignedUrl('putObject', {
-      Bucket: bucketName,
-      Key: attachmentId,
-      Expires: parseInt(urlExpiration)
-    })
-  }
+export function createAttachmentPresignedUrl(attachmentId: string): string {
+  return s3.getSignedUrl('putObject', {
+    Bucket: bucketName,
+    Key: attachmentId,
+    Expires: parseInt(urlExpiration)
+  })
+}
 
-  getAttachmentBucketUrl(attachmentId: string): string {
-    return `https://${bucketName}.s3.amazonaws.com/${attachmentId}`
-  }
-
+export function getAttachmentBucketUrl(attachmentId: string): string {
+  return `https://${bucketName}.s3.amazonaws.com/${attachmentId}`
 }
